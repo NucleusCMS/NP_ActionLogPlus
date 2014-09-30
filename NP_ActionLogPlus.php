@@ -18,7 +18,6 @@ class NP_ActionLogPlus extends NucleusPlugin {
  function getMinNucleusVersion() { return 250; }
  function getDescription() { return $this->translated('Adding some actions for action log. The logs are written out and removed when clearing logs or the number of logs over 400, then the action recorded. Adding the function for downloading the logs written out.'); }
  function supportsFeature($what) {
-  global $CONF;
   switch($what) {
   case 'HelpPage':
   case 'SqlTablePrefix':
@@ -479,7 +478,6 @@ class NP_ActionLogPlus extends NucleusPlugin {
   return $this->getDirectory() . 'logs/';
  }
  function preserveLog() {
-  global $CONF;
   
   if(!@file_exists($this->getLogDirectory())) {
    $this->error = 'Missing the directory for logs';
@@ -547,4 +545,3 @@ class NP_ActionLogPlus extends NucleusPlugin {
   return $ret;
  }
 }
-?>
