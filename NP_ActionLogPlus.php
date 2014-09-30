@@ -21,6 +21,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
   switch($what) {
   case 'HelpPage':
   case 'SqlTablePrefix':
+  case 'SqlApi':
    return 1;
   break;
   default:
@@ -505,7 +506,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
   }
   
   $query = 'SELECT timestamp,message FROM ' . sql_table('actionlog') . ' ORDER BY timestamp DESC';
-  $logData = mysql_query($query);
+  $logData = sql_query($query);
   
   if(!@fwrite( $actionlog, date("Y-m-d H:i:s",time()) . "\t" . '[NP_ActionLogPlus] ' . $this->translated('Auto-write out for action logs') . "\r\n" )){
    $this->error = 'Fail to keep action logs in system cash';
@@ -513,7 +514,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
    return;
   }
   
-  while ($record = mysql_fetch_assoc($logData)) {
+  while ($record = sql_fetch_assoc($logData)) {
    if(!@fwrite( $actionlog, $record['timestamp'] . "\t" . $record['message'] . "\r\n" )){
     $this->error = 'Fail to keep action logs in system cash';
     addToLog('ERROR', '[NP_ActionLogPlus] Fail to keep action logs in system cash');
