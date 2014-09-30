@@ -15,7 +15,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
  function getAuthor() { return 'Mocchi, Shizuki'; }
  function getURL() { return 'http://japan.nucleuscms.org/wiki/plugins:actionlogplus'; }
  function getVersion() { return '0.2.5'; }
- function getMinNucleusVersion() { return 250; }
+ function getMinNucleusVersion() { return 350; }
  function getDescription() { return $this->translated('Adding some actions for action log. The logs are written out and removed when clearing logs or the number of logs over 400, then the action recorded. Adding the function for downloading the logs written out.'); }
  function supportsFeature($what) {
   switch($what) {
