@@ -1,8 +1,8 @@
 <?php
 /*
  * ActionLogPlus plugin for Nucleus CMS
- * ver. 0.2.3
- * Written By Mocchi, Jan. 23, 2008
+ * ver. 0.2.4
+ * Written By Mocchi, Jan.19, 2009
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

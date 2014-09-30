@@ -1,0 +1,476 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- 
+/*
+ * ActionLogPlus plugin for Nucleus CMS
+ * ver. 0.2.4
+ * Written By Mocchi, Jan. 20, 2009
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja-JP" xml:lang="ja-JP">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>追加イベントの概略 - ActionLogPlus plugin for Nucleus CMS</title>
+<style type="text/css">
+body {
+	background-color: #fff;
+	color: #000;
+	font-family: verdana, arial;
+	font-size: small;
+}
+
+@media screen {
+	body {
+		margin-left: 10%;
+		margin-right: 10%;
+	}
+}
+
+@media print {
+	pre, .note, td, th {
+		border: 1px dashed gray;
+	}
+}
+
+img {
+	border: none;
+}
+
+a:link, a:visited {
+	color: #1D3565; 
+	font-weight: bold;
+	text-decoration: none;
+}
+a: hover {
+	text-decoration: underline;
+}
+
+.heading {
+	text-align: center;
+	font-size: xx-large;
+	font-weight: bold;
+	color: gray;	
+}
+
+.heading i {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: small;
+	font-style: normal;
+	font-weight: normal;
+}
+
+p {
+	text-indent: 20px;
+}
+
+h1 {
+	border-bottom: 1px dotted gray;
+	font-size: x-large;
+	color: #596d9d;
+}
+
+h2 {
+	color: gray;
+	font-size: large;
+	margin-left: 20px;
+	text-indent: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+pre, .note, .faq .answer {
+	background-color: #ddd;
+	padding: 10px;
+	font-size: small;
+}
+
+.screenshot {
+	text-align: center;
+	background-color: #ddd;
+	padding: 10px;
+}
+
+.faq .question {
+	font-weight: bold;
+	margin-bottom: 0px;
+}
+
+.faq .answer {
+
+}
+
+.faq {
+	margin-bottom: 20px;
+}
+
+table {
+	border: none;
+}
+
+th {
+	background-color: linen;
+	font-size: medium;
+}
+
+th, td {
+	padding: 5px;
+}
+
+td {
+	background-color: #dddddd;
+	font-size: small;
+	vertical-align: top;
+	text-align: left;
+}
+
+input, select, option, textarea {
+	background-color: transparent;
+}
+
+.deprecated {
+	border: 3px solid red;
+	padding: 5px;
+	font-size: medium;
+}
+
+tt, code, samp {
+	font-size: small;
+}
+
+.warning {
+	color: red;
+}
+.ok {
+	color: green;
+}
+
+acronym, abbr {
+	border-bottom: 1px dotted gray;
+	cursor: help;
+}
+/* refence parameters (greenish) */
+.ref {
+ background-color: #afa;
+ color: #000;
+}
+/* object parameters */
+.obj {
+ color: #00f;
+}
+.obj:after {
+ content: " (object)";
+}
+/* read-only parameters (non-ref; reddish) */
+.ro {
+ background-color: #faa;
+ color: #000;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ActionLogPlus plugin for Nucleus CMS</h1>
+
+<h2>追加イベントの概略</h2>
+
+<p>ActionLogPlusプラグインをインストールしていると、以下のイベントが発生します。</p>
+
+<h3>全体の環境設定関係</h3>
+<ul>
+<li>グローバル設定が変更された時(SettingsUpdate)</li>
+<li>バックアップ・データを作成した時(BackupCreate)</li>
+<li>管理操作履歴が消去される前後(ClearActionlogのPre/Post)</li>
+</ul>
+
+<h3>ウェブログ・チーム関係</h3>
+<ul>
+<li>メンバーの管理権限の変更がデータベースに書き込まれる前後(TeamChangeAdminのPre/Post)</li>
+</ul>
+
+<h3>設定の変更がデータベースに書き込まれる前後</h3>
+<ul>
+<li>ブログ設定(ChangeBlogSettingsのPre/Post)</li>
+<li>カテゴリー設定(ChangeCategorySettingsのPre/Post)</li>
+<li>メンバー設定(ChangeMemberSettingsのPre/Post)</li>
+</ul>
+
+<h3>プラグインが設定したオプションの変更がデータベースに書き込まれる前後</h3>
+<ul>
+<li>グローバルオプション(ChangePluginGlobalOptionsのPre/Post)</li>
+<li>ブログのコンテクスト(ChangePluginBlogOptionsのPre/Post)</li>
+<li>カテゴリーのコンテクスト(ChangePluginCategoryOptionsのPre/Post)</li>
+<li>アイテムのコンテクスト(ChangePluginItemOptionsのPre/Post)</li>
+<li>メンバーのコンテクスト(ChangePluginMemberOptionsのPre/Post)</li>
+</ul>
+
+<h2>追加イベントとパラメータ一覧</h2>
+
+<p>以下のイベントリストは、パラメータ変更がNucleusに知られるかどうかを示すために色を使い分けています。</p>
+
+<ul>
+<li><var class="ref">参照渡し（緑）</var>: この種のパラメータに変更を加えるとNucleusに知られます。</li>
+<li><var class="ro">値渡し（赤）</var>: プラグインイベントハンドラに渡される前に値がコピーされます。これらの変数への変更は自動的に破棄されます。.</li>
+</ul>
+
+<p>パラメータとして渡されるオブジェクトは<var class="obj">object</var>.として示されます。</p>
+<p>ほとんどのオブジェクトは参照渡しで、<var class="obj ref">object by ref</var>のように示されます。</p>
+
+<table frame="void" rules="none" summary="Additional events by this plugin">
+<caption>このプラグインが追加したイベントとパラメータ一覧</caption>
+<thead>
+<tr>
+<th>名前</th>
+<th>いつ</th>
+<th>パラメータ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SettingsUpdate</td>
+<td>グローバル設定が変更された時</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>BackupCreate</td>
+<td>バックアップ・データを作成した時</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>PreClearActionlog</td>
+<td>管理操作履歴が消去される前</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>PostClearActionlog</td>
+<td>管理操作履歴が消去された後</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>PreTeamChangeAdmin</td>
+<td>チームにおけるメンバーの管理権限の変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">blogid</dt>
+<dd>権限を変更したブログのID</dd>
+<dt class="ro">memberid</dt>
+<dd>権限を変更したメンバーのID</dd>
+<dt class="ro">admin</dt>
+<dd>変更前のチームの管理権限。<br />ある場合は1、ない場合は0。<br />通常、下のイベントのadminパラメータと逆の数値となる。</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostTeamChangeAdmin</td>
+<td>チームにおけるメンバーの管理権限の変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">blogid</dt>
+<dd>権限を変更したブログのID</dd>
+<dt class="ro">memberid</dt>
+<dd>権限を変更したメンバーのID</dd>
+<dt class="ro">admin</dt>
+<dd>変更後のチームの管理権限。<br />ある場合は1、ない場合は0。<br />通常、上のイベントのadminパラメータと逆の数値となる。</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangeBlogSettings</td>
+<td>ブログ設定の変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">blogid</dt>
+<dd>設定を変更したブログのID</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangeBlogSettings</td>
+<td>ブログ設定の変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">blogid</dt>
+<dd>設定を変更したブログのID</dd>
+<dt class="ref">blog (object)</dt>
+<dd>設定を変更したBLOGオブジェクト</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangeCategorySettings</td>
+<td>カテゴリー設定の変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">catid</dt>
+<dd>設定を変更したカテゴリーのID</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangeCategorySettings</td>
+<td>カテゴリー設定の変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">catid</dt>
+<dd>設定を変更したカテゴリーのID</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangeMemberSettings</td>
+<td>メンバー設定の変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">memberid</dt>
+<dd>設定を変更したメンバーのID</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangeMemberSettings</td>
+<td>メンバー設定の変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">memberid</dt>
+<dd>設定を変更したメンバーのID</dd>
+<dt class="ref">member (object)</dt>
+<dd>設定を変更したMEMBERオブジェクト</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangePluginGlobalOptions</td>
+<td>プラグインのグローバルオプションの変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">plugid</dt>
+<dd>オプションを変更したプラグインのID</dd>
+<dt class="ro">optionname</dt>
+<dd>オプションの名前</dd>
+<dt class="ref">value</dt>
+<dd>そのオプションの新しい値</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangePluginGlobalOptions</td>
+<td>プラグインのグローバルオプションの変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">pluginid</dt>
+<dd>オプションを変更したプラグインのID</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangePluginBlogOptions</td>
+<td>ブログのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">blogid</dt>
+<dd>オプションを変更したブログのID</dd>
+<dt class="ro">optionname</dt>
+<dd>オプションの名前</dd>
+<dt class="ref">value</dt>
+<dd>そのオプションの新しい値</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangePluginBlogOptions</td>
+<td>ブログのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">blogid</dt>
+<dd>オプションを変更したブログのID</dd>
+<dt class="ref">blog (object)</dt>
+<dd>オプションを変更したBLOGオブジェクト</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangePluginCategoryOptions</td>
+<td>カテゴリーのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">catid</dt>
+<dd>オプションを変更したカテゴリーのID</dd>
+<dt class="ro">optionname</dt>
+<dd>オプションの名前</dd>
+<dt class="ref">value</dt>
+<dd>そのオプションの新しい値</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangePluginCategoryOptions</td>
+<td>カテゴリーのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">catid</dt>
+<dd>オプションを変更したカテゴリーのID</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangePluginItemOptions</td>
+<td>アイテムのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">itemid</dt>
+<dd>オプションを変更したアイテムのID</dd>
+<dt class="ro">optionname</dt>
+<dd>オプションの名前</dd>
+<dt class="ref">value</dt>
+<dd>そのオプションの新しい値</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangePluginItemOptions</td>
+<td>アイテムのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">itemid</dt>
+<dd>オプションを変更したアイテムのID</dd>
+<dt class="ref">item</dt>
+<dd>オプションを変更したITEMデータ</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PreChangePluginMemberOptions</td>
+<td>メンバーのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれる前</td>
+<td>
+<dl>
+<dt class="ro">memberid</dt>
+<dd>オプションを変更したメンバーのID</dd>
+<dt class="ro">optionname</dt>
+<dd>オプションの名前</dd>
+<dt class="ref">value</dt>
+<dd>そのオプションの新しい値</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>PostChangePluginMemberOptions</td>
+<td>メンバーのコンテクストで設定したプラグイン・オプションの変更がデータベースに書き込まれた後</td>
+<td>
+<dl>
+<dt class="ro">memberid</dt>
+<dd>オプションを変更したメンバーのID</dd>
+<dt class="ref">member (object)</dt>
+<dd>オプションを変更したMEMBERオブジェクト</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

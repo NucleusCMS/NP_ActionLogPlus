@@ -1,8 +1,8 @@
-<?
+<?php
 /*
  * ActionLogPlus plugin for Nucleus CMS
- * ver. 0.2.3
- * Written By Mocchi, Jan. 23, 2008
+ * ver. 0.2.4
+ * Written By Mocchi, Jan.19, 2009
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,7 +14,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
  function getName() { return 'ActionLogPlus'; }
  function getAuthor() { return 'Mocchi, Shizuki'; }
  function getURL() { return 'http://japan.nucleuscms.org/wiki/plugins:actionlogplus'; }
- function getVersion() { return '0.2.3'; }
+ function getVersion() { return '0.2.4'; }
  function getMinNucleusVersion() { return 250; }
  function getDescription() { return $this->translated('Adding some actions for action log. The logs are written out and removed when clearing logs or the number of logs over 400, then the action recorded. Adding the function for downloading the logs written out.'); }
  function supportsFeature($what) {
@@ -56,7 +56,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
   $this->deleteOption('ALP_MEDIA');
  }
  function hasAdminArea() {
-  if(file_exists($this->getDirectory().'/') === TRUE ) {
+  if(file_exists($this->getDirectory() . '/') === TRUE ) {
    return 1;
   } else {
    return 0;
@@ -78,7 +78,8 @@ class NP_ActionLogPlus extends NucleusPlugin {
    'PreClearActionlog','PostClearActionlog',
    'BackupCreate',
    'SettingsUpdate',
-   'PostMediaUpload', 'PostMediaRename', 'PostMediaErase'
+   'PostMediaUpload', 'PostMediaRename', 'PostMediaErase',
+   'PostSubdirCreate', 'PostSubdirRemove', 'PostSubdirRename'
    );
  }
  
@@ -99,25 +100,25 @@ class NP_ActionLogPlus extends NucleusPlugin {
   }
   if($action === 'teamchangeadmin') {
    global $blogid, $memberid;
-   if(preg_match('/^[0-9]+$/', $blogid) == 0) return;
-   if(preg_match('/^[0-9]+$/', $memberid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $blogid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $memberid) == 0) return;
    $pmem = MEMBER::createFromID($memberid);
    $pmem->isBlogAdmin($blogid) ? $admin = '1' :$admin = '0' ;
    $manager->notify('PreTeamChangeAdmin' , array('blogid'=>$blogid, 'memberid'=>$memberid, 'admin'=> $admin));
   }
   if($action === 'blogsettingsupdate') {
    global $blogid;
-   if(preg_match('/^[0-9]+$/', $blogid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $blogid) == 0) return;
    $manager->notify('PreChangeBlogSettings' , array('blogid'=>$blogid));
   }
   if($action === 'categoryupdate') {
    global $catid;
-   if(preg_match('/^[0-9]+$/', $catid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $catid) == 0) return;
    $manager->notify('PreChangeCategorySettings' , array('catid'=>$catid));
   }
   if($action === 'changemembersettings') {
    global $memberid;
-   if(preg_match('/^[0-9]+$/', $memberid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $memberid) == 0) return;
    $manager->notify('PreChangeMemberSettings' , array('memberid'=>$memberid));
   }
  }
@@ -133,8 +134,8 @@ class NP_ActionLogPlus extends NucleusPlugin {
   }
   if( $action === 'teamchangeadmin') {
    global $blogid, $memberid;
-   if(preg_match('/^[0-9]+$/', $blogid) == 0) return;
-   if(preg_match('/^[0-9]+$/', $memberid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $blogid) == 0) return;
+   if(preg_match('#^[0-9]+$#', $memberid) == 0) return;
    $pmem = MEMBER::createFromID($memberid);
    $pmem->isBlogAdmin($blogid) ? $admin = '1' :$admin = '0' ;
    $manager->notify('PostTeamChangeAdmin' , array('blogid'=>$blogid, 'memberid'=>$memberid, 'admin'=> $admin));
@@ -422,6 +423,27 @@ class NP_ActionLogPlus extends NucleusPlugin {
   addToLog('INFO', $this->translated('File Erase') . " (Collection Directory:$collection, Filename:$filename)");
  }
  
+ // logs about media sub directories
+ function event_postsubdircreate(&$data){
+  if(!$this->getOption('ALP_MEDIA')) return;
+  $collection = $data['collection'];
+  $subdir = $data['subdir'];
+  addToLog('INFO', $this->translated('Sub Directory Create') . " (Collection Directory:$collection, Sub Directory Name:$subdir)");
+ }
+ function event_postsubdirremove(&$data){
+  if(!$this->getOption('ALP_MEDIA')) return;
+  $collection = $data['collection'];
+  $subdir = $data['subdir'];
+  addToLog('INFO', $this->translated('Sub Directory Remove') . " (Collection Directory:$collection, Sub Directory Name:$subdir)");
+   }
+ function event_postsubdirrename(&$data){
+  if(!$this->getOption('ALP_MEDIA')) return;
+  $collection = $data['collection'];
+  $olddirname = $data['olddirname'];
+  $newdirname = $data['newdirname'];
+  addToLog('INFO', $this->translated('Sub Directory Rename') . " (Collection Directory:$collection, Old Sub Directory Name:$olddirname, New Sub Directory Name:$newdirname)");
+ }
+ 
  // methods
  function checkLog() {
   static $checked = 0;
@@ -492,6 +514,7 @@ class NP_ActionLogPlus extends NucleusPlugin {
   addToLog('INFO', $this->translated('Auto-write out for action logs'));
   return;
  }
+ 
  function translated($english){
   if (!is_array($this->langArray)) {
    $this->langArray=array();
