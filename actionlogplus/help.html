@@ -1,0 +1,210 @@
+<!--
+/*
+ * ActionLogPlus plugin for Nucleus CMS
+ * ver. 0.2.3
+ * Written By Mocchi, Jan. 23, 2008
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+-->
+<h3 id="chapter">目次</h3>
+<ul>
+<li><a href="#chapter1">プラグインの概要</a></li>
+<li><a href="#chapter2">インストール</a></li>
+<li><a href="#chapter3">アンインストール</a></li>
+<li><a href="#chapter4">このプラグインの使い方</a></li>
+<li><a href="#chapter5">エラーメッセージ</a></li>
+<li><a href="#chapter6">発生するイベント</a></li>
+<li><a href="#chapter7">コアのバグの修正</a></li>
+<li><a href="#chapter8">オプション</a></li>
+<li><a href="#chapter9">他のプラグインとの組み合わせ</a></li>
+<li><a href="#chapter10">サポートとバグ報告</a></li>
+<li><a href="#chapter11">機知の問題点</a></li>
+<li><a href="#chapter12">開発履歴</a></li>
+</ul>
+
+<h3 id="chapter1">プラグインの概要</h3>
+
+<p>管理操作履歴に保存される管理操作を増やします。
+履歴を削除する時もしくは履歴が400件に達した時にテキストに書き出し、
+履歴が消去された後にその履歴を残します。
+履歴のダウンロード機能も提供します。
+プラグイン用にイベントを追加します。</p>
+
+<h3 id="chapter2">インストール</h3>
+<ul>
+<li>Zipファイルを展開して、中身をサーバーのプラグインディレクトリにアップロードします</li>
+<li>管理画面からプラグインをインストールします</li>
+<li>プラグイン・オプションの設定確認をします</li>
+<li>アクセス権限の設定を、FTPソフトなどで行います。<br />
+今回設定するのは、同梱の「logs」ディレクトリです。「777」に設定してください。<br />
+「.htaccess」でアクセス制御をしているので、ブラウザから直接参照されることはありません。</li>
+</ul>
+
+<h3 id="chapter3">アンインストール</h3>
+<p>プラグインの管理から、削除を選択してください。オプションはすべて削除されます。</p>
+
+<h3 id="chapter4">このプラグインの使い方</h3>
+
+<h4>履歴として記録される管理操作を追加します</h4>
+<p>Nucleusは初期設定時、以下のアクションを管理操作履歴に書き出します。（ver. 3.3）</p>
+<ul>
+<li>認証用リンクを送信したとき</li>
+<li>新しいメンバーが追加されたとき</li>
+<li>ファイルを見つけられないのでプラグインを読み込むことができなかったとき</li>
+<li>PHP構造がおかしくてプラグインを読み込むことができなかったとき</li>
+<li>テーブル接頭辞をサポートしていないためプラグインを読み込むことができなかったとき</li>
+<li>ログイン成功時</li>
+<li>ログイン失敗時</li>
+<li>メンバーをブログチームに追加したとき</li>
+<li>許可されていないアクションをしたとき</li>
+<li>actionurlの長さが適切でなかったとき</li>
+<li>管理操作履歴に残るアクションを増やします</li>
+</ul>
+
+<p>このプラグインは、これに加えて以下のアクションを管理操作履歴に書き出します。</p>
+<ul>
+<li>ログアウト</li>
+<li>管理操作履歴の削除</li>
+<li>アイテムの追加、編集、削除</li>
+<li>カテゴリーの追加、編集、削除</li>
+<li>ウェブログの追加、編集、削除</li>
+<li>メンバーの追加、編集、削除</li>
+<li>チームへのメンバー追加・削除・管理権限の変更</li>
+<li>プラグインの追加・変更・削除</li>
+<li>バックアップ・データの作成</li>
+<li>グローバル設定の変更</li>
+<li>ファイルの追加</li>
+</ul>
+
+<h4>管理操作履歴を保存します</h4>
+<p>管理操作履歴は初期設定時、500件に達すると自動的に250件まで削除されます。また、管理操作履歴の削除で消去することができます。このプラグインは、管理操作履歴が400件に達するか、管理操作履歴の削除を行った際、それまでの履歴をテキストファイルに書き出して保存し、その履歴を残します。 保存場所はプラグインの独自フォルダです。</p>
+
+<h4>管理操作履歴ファイルをダウンロードします</h4>
+<p>また、プラグインの管理画面においてそれまで蓄積された管理操作履歴の一覧の確認と、
+ファイルのダウンロードを行うことができます</p>
+
+<h3 id="chapter5">エラーメッセージ</h3>
+
+<p>ログファイルの自動書き出しに失敗すると、以下のエラーメッセージを管理操作履歴に残します。</p>
+
+<ul>
+<li><a href="#e-1">Missing the directory for logs</a></li>
+<li><a href="#e-2">Forbidden access to the directory for logs</a></li>
+<li><a href="#e-3">Fail to open file for preserving action logs</a></li>
+<li><a href="#e-4">Fail to lock file for preserving action logs</a></li>
+<li><a href="#e-5">Fail to keep action logs in system cash</a></li>
+<li><a href="#e-6">Fail to close file for preserving action logs</a></li>
+<li><a href="#e-7">Fail to change the mode of file for action logs</a></li>
+</ul>
+
+<h4 id="e-1">Missing the directory for logs</h4>
+<p>サーバのプラグイン・ディレクトリの中にあるディレクトリ「actionlog」にディレクトリ「logs」がない場合、このエラーがでます。
+FTPソフトなどでディレクトリを作成してください。</p>
+
+<h4 id="e-2">Forbidden access to the directory for logs</h4>
+<p>ディレクトリ「actionlog」の中にあるディレクトリ「logs」のアクセス権限が「777」ではないとき、このエラーがでます。
+FTPソフトなどで権限を設定してください。</p>
+
+<h4 id="e-3">Fail to open file for preserving action logs</h4>
+<p>ログファイルを作成することができないとき、このエラーがでます。
+PHP設定のディレクティブ「safe_mode」について、サーバ管理者に相談してください。</p>
+
+<h4 id="e-4">Fail to lock file for preserving action logs</h4>
+<p>ログファイルを排他ロックすることができないとき、このエラーがでます。サーバ管理者に相談してください。</p>
+
+<h4 id="e-5">Fail to keep action logs in system cash</h4>
+<p>管理操作履歴に関する情報を、サーバの一時保存領域へ補完できない場合、このエラーがでます。
+サーバ管理者に相談してください。</p>
+
+<h4 id="e-6">Fail to close file for preserving action logs</h4>
+<p>ログファイルに管理操作履歴に関する情報を書き込むことに失敗した場合、このエラーがでます。
+サーバ管理者に相談してください。</p>
+
+<h4 id="e-7">Fail to change the mode of file for action logs</h4>
+<p>書き出したログファイルへのアクセス権限を適切に設定できていない場合、このエラーがでます。
+サーバ管理者に相談してください。</p>
+
+
+<h3 id="chapter6">発生するイベント</h3>
+
+<p>追加のイベントを発生します。このイベントは他のプラグインでも利用可能です。<br />
+イベント一覧は、プラグインに同梱されている「additionalEvents.html」を参照していただくか、<a href="http://japan.nucleuscms.org/wiki/plugins:actionlogplus" title="NP_ActionLogPlus">WIKI</a>を参照してください。</p>
+
+<h3 id="chapter7">コアのバグの修正</h3>
+<p>このプラグインを利用する際は、コアに以下の修正をしてください。<br />
+lib/Admin.phpのdeleteOneTeamMemberメソッド（バージョン3.3なら2328行から）</p>
+
+<h4>修正前</h4>
+<p>$manager→notify(&rsquo;PostDeleteTeamMember&rsquo;, array(&rsquo;member&rsquo; =&gt; &amp;$mem, &rsquo;blogid&rsquo; =&gt; $blogid));</p>
+
+<h4>修正後</h4>
+<p>$manager→notify(&rsquo;PostDeleteTeamMember&rsquo;, array(&rsquo;member&rsquo; =&gt; &amp;$tmem, &rsquo;blogid&rsquo; =&gt; $blogid));</p>
+
+<h3 id="chapter8">オプション</h3>
+<p>以下のオプションを設定します。</p>
+<ul>
+<li>メンバー関連の履歴（変更・削除）を記録しますか？</li>
+<li>ウェブログ関連の履歴（作成・変更・削除）を記録しますか？</li>
+<li>チーム関連の履歴（チームへのメンバー削除・管理権限の変更）を記録しますか？</li>
+<li>カテゴリー関連の履歴（追加・変更・削除）を記録しますか？</li>
+<li>アイテム関連の履歴（追加・変更・削除・移動）を記録しますか？</li>
+<li>禁止IP関連の履歴（登録・削除）を記録しますか？</li>
+<li>プラグイン関連の履歴（追加・変更・削除）を記録しますか？</li>
+<li>バックアップ・データの作成を記録しますか？</li>
+<li>グローバル設定の変更を記録しますか?</li>
+<li>外部ファイル関連の履歴（ファイルアップロード）を保存しますか？</li>
+</ul>
+
+<h3 id="chapter9">他のプラグインとの組み合わせ</h3>
+
+<p><a href="http://japan.nucleuscms.org/bb/viewtopic.php?t=2576" title="NP_EachBlogDir - Nucleus CMS WIKI">NP_EachBlogDir</a>や
+<a href="http://japan.nucleuscms.org/wiki/plugins:improvedmedia" title="NP_ImprovedMedia - Nucleus CMS WIKI">NP_ImprovedMedia</a>
+を一緒に利用している場合、外部ファイルに関する履歴に「ファイル削除」と「ファイル名変更」が加わります。上記2つのプラグインが発生するイベント「PostRenameMedia」「PostDeleteMedia」をキャッチするからです。</p>
+
+<h3 id="chapter10">サポートとバグ報告</h3>
+<p>サポート・フォーラムにおいて行います。<a href="http://japan.nucleuscms.org/bb/viewtopic.php?p=21350" title="NP_ActionLogPlus &lt; プラグイン全般 &lt; Nucleus(JP)フォーラム Forum Index">http://japan.nucleuscms.org/bb/viewtopic.php?p=21350</a><br />
+<a href="http://japan.nucleuscms.org/wiki/plugins:actionlogplus" title="NP_ActionLogPlus">NP_ActionLogPlus - Nucleus CMS WIKI</a>も参照してください。</p>
+
+
+<h3 id="chapter11">機知の問題点</h3>
+<p>ver. 3.3の自動保存機能は、現在作成中のアイテムの下書きを新しいIDのアイテムとして保存しておき
+作成中のアイテムを登録した際に下書きアイテムを削除する仕様となっています。
+そのため、自動保存機能が働いた場合、意図せずにアイテムの削除と追加が記録されます。
+おどろかないでください。</p>
+<p>「.htaccess」でアクセス制御しているとは言え、プラグイン・ディレクトリ内に書き込み可能なディレクトリを作成しているので、
+セキュリティ・リスクがあるのではないかという懸念があります。お気づきの点は、サポート・フォーラムへぜひご相談ください。</p>
+
+<h3 id="chapter12">開発履歴</h3>
+<dl>
+<dt>2008.01.23 ver.0.2.3</dt>
+<dd><ul>
+<li>管理操作履歴の自動書き出しの不具合を修正。</li>
+<li>ログファイル管理画面の不具合を修正。</li>
+<li>ヘルプファイルに「エラーメッセージ」に関する章を追加</li>
+</ul></dd>
+<dt>2008.01.19 ver.0.2.2</dt>
+<dd><ul>
+<li>プラグイン用イベントをたくさん設定</li>
+<li>外部ファイル管理に関するイベントに対応</li>
+<li>タイプミスを修正</li>
+<li>ヘルプファイルの作成</li>
+</ul></dd>
+<dt>2007.12.27 ver.0.2.1 リリースキャンディデート版として公開</dt>
+<dd><ul>
+<li>グローバル・オプションの変更、バックアップ書き出し、管理操作履歴の削除に対応</li>
+<li>言語ファイルの設置</li>
+<li>セキュリティチェック</li>
+</ul></dd>
+<dt>2007.12.19 ver.0.2.0 ベータ版として公開</dt>
+<dd><ul>
+<li>管理操作画面の設置</li>
+</ul></dd>
+<dt>2007.12.17 ver.0.1.0 アルファ版として公開</dt>
+<dd><ul>
+<li>日本語をソースに含めてある</li>
+</ul></dd>
+</dl>
