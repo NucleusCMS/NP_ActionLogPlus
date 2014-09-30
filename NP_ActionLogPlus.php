@@ -90,13 +90,16 @@ class NP_ActionLogPlus extends NucleusPlugin {
   $actions = array('backupcreate', 'clearactionlog', 'settingsupdate', 'teamchangeadmin', 'blogsettingsupdate', 'categoryupdate', 'changemembersettings');
   if(!in_array($action, $actions)) return;
   if($action === 'backupcreate') {
-   $manager->notify('BackupCreate' , array(''));
+   $param = array('');
+   $manager->notify('BackupCreate' , $param);
   }
   if($action === 'clearactionlog') {
-   $manager->notify('PreClearActionlog' , array(''));
+   $param = array('');
+   $manager->notify('PreClearActionlog' , $param);
   }
   if($action === 'settingsupdate') {
-   $manager->notify('SettingsUpdate' , array(''));
+   $param = array('');
+   $manager->notify('SettingsUpdate' , $param);
   }
   if($action === 'teamchangeadmin') {
    global $blogid, $memberid;
@@ -104,22 +107,26 @@ class NP_ActionLogPlus extends NucleusPlugin {
    if(preg_match('#^[0-9]+$#', $memberid) == 0) return;
    $pmem = MEMBER::createFromID($memberid);
    $pmem->isBlogAdmin($blogid) ? $admin = '1' :$admin = '0' ;
-   $manager->notify('PreTeamChangeAdmin' , array('blogid'=>$blogid, 'memberid'=>$memberid, 'admin'=> $admin));
+   $param = array('blogid'=>$blogid, 'memberid'=>$memberid, 'admin'=> $admin);
+   $manager->notify('PreTeamChangeAdmin' , $param);
   }
   if($action === 'blogsettingsupdate') {
    global $blogid;
    if(preg_match('#^[0-9]+$#', $blogid) == 0) return;
-   $manager->notify('PreChangeBlogSettings' , array('blogid'=>$blogid));
+   $param = array('blogid'=>$blogid);
+   $manager->notify('PreChangeBlogSettings' , $param);
   }
   if($action === 'categoryupdate') {
    global $catid;
    if(preg_match('#^[0-9]+$#', $catid) == 0) return;
-   $manager->notify('PreChangeCategorySettings' , array('catid'=>$catid));
+   $param = array('catid'=>$catid);
+   $manager->notify('PreChangeCategorySettings' , $param);
   }
   if($action === 'changemembersettings') {
    global $memberid;
    if(preg_match('#^[0-9]+$#', $memberid) == 0) return;
-   $manager->notify('PreChangeMemberSettings' , array('memberid'=>$memberid));
+   $param = array('memberid'=>$memberid);
+   $manager->notify('PreChangeMemberSettings' , $param);
   }
  }
  
@@ -130,7 +137,8 @@ class NP_ActionLogPlus extends NucleusPlugin {
   $action = $data['action'];
   if(!in_array($action,$actions)) return;
   if( $action === 'clearactionlog') {
-   $manager->notify('PostClearActionlog' , array(''));
+   $param = array('');
+   $manager->notify('PostClearActionlog' , $param);
   }
   if( $action === 'teamchangeadmin') {
    global $blogid, $memberid;
@@ -138,7 +146,8 @@ class NP_ActionLogPlus extends NucleusPlugin {
    if(preg_match('#^[0-9]+$#', $memberid) == 0) return;
    $pmem = MEMBER::createFromID($memberid);
    $pmem->isBlogAdmin($blogid) ? $admin = '1' :$admin = '0' ;
-   $manager->notify('PostTeamChangeAdmin' , array('blogid'=>$blogid, 'memberid'=>$memberid, 'admin'=> $admin));
+   $param = array('blogid'=>$blogid, 'memberid'=>$memberid, 'admin'=> $admin);
+   $manager->notify('PostTeamChangeAdmin' , $param);
   }
  }
  
@@ -150,31 +159,36 @@ class NP_ActionLogPlus extends NucleusPlugin {
     $pluginid = $data['plugid'];
     $optionname = $data['optionname'];
     $value = &$data['value'];
-    $manager->notify('PreChangePluginGlobalOptions' , array('plugid'=>$pluginid, 'optionname'=>$optionname, 'value'=>&$value));
+    $param = array('plugid'=>$pluginid, 'optionname'=>$optionname, 'value'=>&$value);
+    $manager->notify('PreChangePluginGlobalOptions' , $param);
    return;
    case 'member':
     $memberid = $data['contextid'];
     $optionname = $data['optionname'];
     $value = &$data['value'];
-    $manager->notify('PreChangePluginMemberOptions' , array('memberid'=>$memberid, 'optionname'=>$optionname, 'value'=>&$value));
+    $param = array('memberid'=>$memberid, 'optionname'=>$optionname, 'value'=>&$value);
+    $manager->notify('PreChangePluginMemberOptions' , $param);
    return;
    case 'blog':
     $blogid = $data['contextid'];
     $optionname = $data['optionname'];
     $value = &$data['value'];
-    $manager->notify('PreChangePluginBlogOptions' , array('blogid'=>$blogid, 'optionname'=>$optionname, 'value'=>&$value));
+    $param = array('blogid'=>$blogid, 'optionname'=>$optionname, 'value'=>&$value);
+    $manager->notify('PreChangePluginBlogOptions' , $param);
    return;
    case 'category':
     $catid = $data['contextid'];
     $optionname = $data['optionname'];
     $value = &$data['value'];
-    $manager->notify('PreChangePluginCategoryOptions' , array('catid'=>$catid, 'optionname'=>$optionname, 'value'=>&$value));
+    $param = array('catid'=>$catid, 'optionname'=>$optionname, 'value'=>&$value);
+    $manager->notify('PreChangePluginCategoryOptions' , $param);
    return;
    case 'item':
     $itemid = $data['contextid'];
     $optionname = $data['optionname'];
     $value = &$data['value'];
-    $manager->notify('PreChangePluginItemOptions' , array('itemid'=>$itemid, 'optionname'=>$optionname, 'value'=>&$value));
+    $param = array('itemid'=>$itemid, 'optionname'=>$optionname, 'value'=>&$value);
+    $manager->notify('PreChangePluginItemOptions' , $param);
    return;
    default:
    return;
@@ -187,29 +201,37 @@ class NP_ActionLogPlus extends NucleusPlugin {
   switch($data['context']) {
    case 'global':
     $pluginid = $data['plugid'];
-    $manager->notify('PostChangePluginGlobalOptions' , array('pluginid'=>$pluginid));
+    $param = array('pluginid'=>$pluginid);
+    $manager->notify('PostChangePluginGlobalOptions' , $param);
    break;
    case 'member':
     $memberid = $data['memberid'];
     $member = &$data['member'];
-    $manager->notify('PostChangeMemberSettings' , array('memberid'=>$memberid, 'member'=> &$member));
-    $manager->notify('PostChangePluginMemberOptions' , array('memberid'=>$memberid, 'member'=> &$member));
+    $param = array('memberid'=>$memberid, 'member'=> &$member);
+    $manager->notify('PostChangeMemberSettings' , $param);
+    $param = array('memberid'=>$memberid, 'member'=> &$member);
+    $manager->notify('PostChangePluginMemberOptions' , $param);
    break;
    case 'blog':
     $blogid = $data['blogid'];
     $blog = &$data['blog'];
-    $manager->notify('PostChangeBlogSettings' , array('blogid'=>$blogid, 'blog'=>&$blog));
-    $manager->notify('PostChangePluginBlogOptions' , array('blogid'=>$blogid, 'blog'=>&$blog));
+    $param = array('blogid'=>$blogid, 'blog'=>&$blog);
+    $manager->notify('PostChangeBlogSettings' , $param);
+    $param = array('blogid'=>$blogid, 'blog'=>&$blog);
+    $manager->notify('PostChangePluginBlogOptions' , $param);
    break;
    case 'category':
     $catid = $data['catid'];
-    $manager->notify('PostChangeCategorySettings' , array('catid'=>$catid));
-    $manager->notify('PostChangePluginCategoryOptions' , array('catid'=>$catid));
+    $param = array('catid'=>$catid);
+    $manager->notify('PostChangeCategorySettings' , $param);
+    $param = array('catid'=>$catid);
+    $manager->notify('PostChangePluginCategoryOptions' , $param);
    break;
    case 'item':
     $itemid = $data['itemid'];
     $item = &$data['item'];
-    $manager->notify('PostChangePluginItemOptions' , array('itemid'=>$itemid, 'item'=>&$item));
+    $param = array('itemid'=>$itemid, 'item'=>&$item);
+    $manager->notify('PostChangePluginItemOptions' , $param);
    break;
    default:
    return;
